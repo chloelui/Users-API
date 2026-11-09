@@ -6,14 +6,15 @@ const router = Router();
 
 // ---------- file uploads ----------
 const upload = multer({
-    storage: multer.memoryStorage(),
-    limits: { fileSize: 2 * 1024 * 1024 }, // 2 MB
-    fileFilter: (req, file, cb) => {
-        if (file.mimestype.startsWith("image/")) return cb(null, true);
-        const err = new Error("Only image files are allowed.");
-        err.status = 400;
-        cb(err);
-    },
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2 MB
+  fileFilter: (req, file, cb) => {
+    const type = file.mimetype ?? file.mimeType ?? "";
+    if (type.startsWith("image/")) return cb(null, true);
+    const err = new Error("Only image files are allowed.");
+    err.status = 400;
+    cb(err);
+  },
 });
 
 // ---------- helpers ----------
@@ -42,7 +43,8 @@ function toApiUser(row) {
 }
 
 function fileToDataUrl(file) {
-    return `data:${file.mimetype};base64,${file.buffer.toString("base64")}`;
+  const type = file.mimetype ?? file.mimeType;
+  return `data:${type};base64,${file.buffer.toString("base64")}`;
 }
 
 function parseList(value) {

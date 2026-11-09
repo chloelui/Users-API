@@ -10,7 +10,7 @@ app.use(cors({ origin: process.env.CLIENT_ORIGIN || "http://localhost:5173" }));
 app.use(express.json());
 
 app.get("/", (req, res) => {
-    res.json({ status: "users_api is running "});
+  res.json({ status: "users_api is running" });
 });
 
 app.use("/users", usersRouter);
